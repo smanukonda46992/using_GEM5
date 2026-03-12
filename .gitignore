@@ -1,0 +1,18 @@
+# GEM5 build files (very large)
+gem5/build/
+gem5/.git/
+
+# Compiled binaries
+hello
+
+# Output files
+m5out/
+
+# OS files
+.DS_Store
+*.swp
+*.swo
+
+# Python cache
+__pycache__/
+*.pyc
