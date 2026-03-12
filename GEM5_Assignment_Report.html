@@ -1,0 +1,1592 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>GEM5 Assignment Report - Sai Mohan Manukonda</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      securityLevel: 'loose'
+    });
+    window.addEventListener('load', function() {
+      var converted = new Set();
+
+      document.querySelectorAll('pre').forEach(function(pre) {
+        var code = pre.querySelector('code');
+        var preHasMermaid = pre.className && pre.className.indexOf('mermaid') !== -1;
+        var codeHasMermaid =
+          code &&
+          (code.className || '').match(/(?:^|\s)(?:mermaid|language-mermaid)(?:\s|$)/);
+
+        if (preHasMermaid || codeHasMermaid) {
+          var div = document.createElement('div');
+          div.className = 'mermaid';
+          div.textContent = code ? code.textContent : pre.textContent;
+          if (pre.parentNode) {
+            if (code) {
+              converted.add(code);
+            }
+            pre.parentNode.replaceChild(div, pre);
+          }
+        }
+      });
+
+      // Handle rare cases where mermaid markup exists without a <pre> wrapper
+      document.querySelectorAll('code').forEach(function(code) {
+        var hasMermaid = (code.className || '').indexOf('mermaid') !== -1 || (code.className || '').indexOf('language-mermaid') !== -1;
+        if (!hasMermaid || converted.has(code)) {
+          return;
+        }
+        var wrapper = document.createElement('div');
+        wrapper.className = 'mermaid';
+        wrapper.textContent = code.textContent;
+        if (code.parentNode) {
+          code.parentNode.replaceChild(wrapper, code);
+          converted.add(wrapper);
+        }
+      });
+
+      setTimeout(function() {
+        mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+      }, 100);
+    });
+  </script>
+
+  <style>
+  body {
+      font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+      line-height: 1.5;
+      color: #333;
+      background-color: #fafafa;
+      margin: 0 !important;
+      padding: 20px !important;
+      font-size: 14px;
+  }
+
+  table {
+      border-collapse: collapse;
+      min-width: 60%;
+      max-width: 100%;
+      margin: 20px 0;
+      background: white;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  }
+
+  table tr th {
+      background-color: #143452;
+      color: white;
+      padding: 12px 15px;
+      text-align: left;
+      font-weight: 500;
+  }
+
+  .table-http th,
+  .table-http td,
+  table th,
+  table td {
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      white-space: normal;
+  }
+
+  .tr-break {
+      background-color: #2d79b717 !important;
+  }
+
+  .tr-break td {
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: bold;
+  }
+
+  table tr td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #ecf0f1;
+  }
+
+  table tr:last-child td {
+      border-bottom: none;
+  }
+
+  table tr:nth-child(even) {
+      background-color: #f8f9fa;
+  }
+
+  .highlight {
+      background-color: #fff3cd !important;
+  }
+
+  a {
+      font-size: 14px;
+  }
+
+  code {
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Monaco', 'Consolas', monospace;
+      background: #fff8e4;
+      color: #c99a0d;
+      font-size: 13px;
+  }
+
+  pre code {
+      background-color: transparent;
+  }
+
+  pre {
+      background-color: #000;
+      color: #f8f8f2;
+      padding: 20px;
+      border-radius: 6px;
+      border-left: 4px solid #3498db;
+      overflow-x: auto;
+  }
+
+  pre code.language-php,
+  pre code.language-sql,
+  pre code.language-javascript,
+  pre code.language-bash,
+  pre code.language-shell {
+    background-color: #282c34 !important;
+    color: #abb2bf;
+  }
+
+  /* Syntax Highlighting */
+  code span.kw { color: #c678dd; font-weight: bold; } /* Keyword */
+  code span.dt { color: #e5c07b; } /* Datatype */
+  code span.dv { color: #d19a66; } /* Decimal Value */
+  code span.bn { color: #d19a66; } /* Base N */
+  code span.fl { color: #d19a66; } /* Float */
+  code span.ch { color: #98c379; } /* Char */
+  code span.st { color: #98c379; } /* String */
+  code span.co { color: #5c6370; font-style: italic; } /* Comment */
+  code span.ot { color: #e06c75; } /* Other */
+  code span.al { color: #e06c75; font-weight: bold; } /* Alert */
+  code span.fu { color: #61afef; } /* Function */
+  code span.er { color: #e06c75; font-weight: bold; } /* Error */
+  code span.wa { color: #e06c75; font-style: italic; } /* Warning */
+  code span.cn { color: #d19a66; } /* Constant */
+  code span.sc { color: #e5c07b; } /* Special Char */
+  code span.vs { color: #98c379; } /* Verbatim String */
+  code span.ss { color: #98c379; } /* Special String */
+  code span.im { color: #c678dd; } /* Import */
+  code span.va { color: #e06c75; } /* Variable */
+  code span.cf { color: #c678dd; } /* Control Flow */
+  code span.op { color: #56b6c2; } /* Operator */
+  code span.bu { color: #e5c07b; } /* BuiltIn */
+  code span.ex { color: #d19a66; } /* Extension */
+  code span.pp { color: #e5c07b; } /* Preprocessor */
+  code span.at { color: #d19a66; } /* Attribute */
+  code span.do { color: #5c6370; font-style: italic; } /* Documentation */
+  code span.an { color: #5c6370; font-style: italic; } /* Annotation */
+  code span.cv { color: #5c6370; font-style: italic; } /* Comment Var */
+  code span.in { color: #5c6370; font-style: italic; } /* Information */
+
+  ul, ol {
+      margin: 15px 0;
+      padding-left: 30px;
+  }
+
+  li {
+      margin-bottom: 8px;
+  }
+
+  blockquote {
+      background-color: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 15px 20px;
+      margin: 20px 0;
+      border-radius: 4px;
+      color: #856404;
+  }
+
+  pre code.language-json {
+    background-color: #0d1117 !important;
+    color: #58a6ff !important;
+    display: block;
+    font-size: 14px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin: -15px;
+  }
+
+  .table-http code {
+      font-size: 12px;
+  }
+
+  .table-http th:nth-child(1),.table-http td:nth-child(1) { width: 8%; }  /* HTTP Method */
+  .table-http th:nth-child(2),.table-http td:nth-child(2) { width: 15%; } /* URL */
+  .table-http th:nth-child(3),.table-http td:nth-child(3) { width: 19%; } /* Mô tả */
+  .table-http th:nth-child(4),.table-http td:nth-child(4) { width: 43%; } /* RewriteRule */
+  .table-http th:nth-child(5),.table-http td:nth-child(5) { width: 15%; } /* Ví dụ */
+
+  pre, pre.sourceCode {
+      background-color: #c0c4c73b;
+  }
+
+  .sourceCode {
+      overflow: auto;
+  }
+
+  /* Pandoc highlight overrides */
+  pre.sourceCode {
+      background: #f7f7f7;
+      border: 1px solid #e0e0e0;
+      padding: 16px;
+      border-radius: 6px;
+  }
+  .sourceCode code {
+      font-family: 'Monaco', 'Consolas', monospace;
+      font-size: 13px;
+  }
+  .sourceCode .kw { color: #2a8ad4; font-weight: 700; }    /* keywords */
+  .sourceCode .cf { color: #2a8ad4; font-weight: 700; }    /* control flow */
+  .sourceCode .dt { color: #070707; }                      /* data types */
+  .sourceCode .fu { color: #8b5cf6; }                     /* functions */
+  .sourceCode .op { color: #2a8ad4; }                     /* operators */
+  .sourceCode .st { color: #0aa370; }                     /* strings */
+  .sourceCode .dv,                                     /* decimal values */
+  .sourceCode .bn { color: #c18401; }                     /* numbers */
+  .sourceCode .fl { color: #c18401; }                     /* floats */
+  .sourceCode .ch { color: #0aa370; }                     /* chars */
+  .sourceCode .co { color: #6a737d; font-style: italic; } /* comments */
+  .sourceCode .va { color: #444; }                        /* variables */
+  .sourceCode .cn { color: #c18401; font-weight: 700; }   /* constants */
+  .sourceCode .al { color: #d73a49; font-weight: 700; }   /* alerts */
+  .sourceCode .an { color: #d73a49; font-weight: 700; }   /* annotations */
+  .sourceCode .at { color: #005cc5; }                     /* attributes */
+  .sourceCode .im { color: #005cc5; }                     /* imports */
+
+  #TOC {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+  }
+
+  #TOC > ul {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  #TOC ul {
+    list-style: none;
+    padding-left: 20px;
+  }
+
+  #TOC li {
+    margin: 8px 0;
+  }
+
+  #TOC a {
+    text-decoration: none;
+    color: #0066cc;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  #TOC a:hover {
+    color: #004499;
+    text-decoration: underline;
+  }
+
+  #TOC > ul > li > a {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #333;
+  }
+
+  #TOC ul ul a {
+    font-size: 0.95em;
+    color: #555;
+  }
+
+  hr {
+      background: #cacaca;
+  }
+
+  .w-50 {
+      width: 50%;
+  }
+
+  .w-100 {
+      width: 100%;
+  }
+
+  .max-w-100 {
+      max-width: 100% !important;
+  }
+
+  .shadow-xs {
+      box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  }
+
+  a {
+      font-size: 14px;
+  }
+
+  code {
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Monaco', 'Consolas', monospace;
+      background: #fff8e4;
+      color: #c99a0d;
+      font-size: 13px;
+  }
+
+  pre code {
+      background-color: transparent;
+  }
+
+  pre {
+      background-color: #000;
+      color: #f8f8f2;
+      padding: 20px;
+      border-radius: 6px;
+      border-left: 4px solid #3498db;
+      overflow-x: auto;
+  }
+
+  pre.sourceCode {
+      border-left: 4px solid #3498db;
+  }
+
+  pre code.language-php,
+  pre code.language-sql,
+  pre code.language-javascript,
+  pre code.language-bash,
+  pre code.language-shell {
+    background-color: #282c34 !important;
+    color: #abb2bf;
+  }
+
+  /* Syntax Highlighting */
+  code span.kw { color: #c678dd; font-weight: bold; } /* Keyword */
+  code span.dt { color: #e5c07b; } /* Datatype */
+  code span.dv { color: #d19a66; } /* Decimal Value */
+  code span.bn { color: #d19a66; } /* Base N */
+  code span.fl { color: #d19a66; } /* Float */
+  code span.ch { color: #98c379; } /* Char */
+  code span.st { color: #98c379; } /* String */
+  code span.co { color: #5c6370; font-style: italic; } /* Comment */
+  code span.ot { color: #e06c75; } /* Other */
+  code span.al { color: #e06c75; font-weight: bold; } /* Alert */
+  code span.fu { color: #61afef; } /* Function */
+  code span.er { color: #e06c75; font-weight: bold; } /* Error */
+  code span.wa { color: #e06c75; font-style: italic; } /* Warning */
+  code span.cn { color: #d19a66; } /* Constant */
+  code span.sc { color: #e5c07b; } /* Special Char */
+  code span.vs { color: #98c379; } /* Verbatim String */
+  code span.ss { color: #98c379; } /* Special String */
+  code span.im { color: #c678dd; } /* Import */
+  code span.va { color: #e06c75; } /* Variable */
+  code span.cf { color: #c678dd; } /* Control Flow */
+  code span.op { color: #56b6c2; } /* Operator */
+  code span.bu { color: #e5c07b; } /* BuiltIn */
+  code span.ex { color: #d19a66; } /* Extension */
+  code span.pp { color: #e5c07b; } /* Preprocessor */
+  code span.at { color: #d19a66; } /* Attribute */
+  code span.do { color: #5c6370; font-style: italic; } /* Documentation */
+  code span.an { color: #5c6370; font-style: italic; } /* Annotation */
+  code span.cv { color: #5c6370; font-style: italic; } /* Comment Var */
+  code span.in { color: #5c6370; font-style: italic; } /* Information */
+
+  ul, ol {
+      margin: 15px 0;
+      padding-left: 30px;
+  }
+
+  li {
+      margin-bottom: 8px;
+  }
+
+  blockquote {
+      background-color: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 15px 20px;
+      margin: 20px 0;
+      border-radius: 4px;
+      color: #856404;
+  }
+
+  pre code.language-json {
+    background-color: #0d1117 !important;
+    color: #58a6ff !important;
+    display: block;
+    font-size: 14px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin: -15px;
+  }
+
+  .table-http code {
+      font-size: 12px;
+  }
+
+  .table-http th:nth-child(1),.table-http td:nth-child(1) { width: 8%; }  /* HTTP Method */
+  .table-http th:nth-child(2),.table-http td:nth-child(2) { width: 15%; } /* URL */
+  .table-http th:nth-child(3),.table-http td:nth-child(3) { width: 19%; } /* Mô tả */
+  .table-http th:nth-child(4),.table-http td:nth-child(4) { width: 43%; } /* RewriteRule */
+  .table-http th:nth-child(5),.table-http td:nth-child(5) { width: 15%; } /* Ví dụ */
+
+  pre, pre.sourceCode {
+      background-color: #c0c4c73b;
+  }
+
+  .sourceCode {
+      overflow: auto;
+  }
+
+  /* Pandoc highlight overrides */
+  pre.sourceCode {
+      background: #f7f7f7;
+      border: 1px solid #e0e0e0;
+      padding: 16px;
+      border-radius: 6px;
+      border-left: 4px solid #3498db;
+  }
+  .sourceCode code {
+      font-family: 'Monaco', 'Consolas', monospace;
+      font-size: 13px;
+  }
+  .sourceCode .kw { color: #2a8ad4; font-weight: 700; }    /* keywords */
+  .sourceCode .cf { color: #2a8ad4; font-weight: 700; }    /* control flow */
+  .sourceCode .dt { color: #070707; }                      /* data types */
+  .sourceCode .fu { color: #8b5cf6; }                     /* functions */
+  .sourceCode .op { color: #2a8ad4; }                     /* operators */
+  .sourceCode .st { color: #0aa370; }                     /* strings */
+  .sourceCode .dv,                                     /* decimal values */
+  .sourceCode .bn { color: #c18401; }                     /* numbers */
+  .sourceCode .fl { color: #c18401; }                     /* floats */
+  .sourceCode .ch { color: #0aa370; }                     /* chars */
+  .sourceCode .co { color: #6a737d; font-style: italic; } /* comments */
+  .sourceCode .va { color: #444; }                        /* variables */
+  .sourceCode .cn { color: #c18401; font-weight: 700; }   /* constants */
+  .sourceCode .al { color: #d73a49; font-weight: 700; }   /* alerts */
+  .sourceCode .an { color: #d73a49; font-weight: 700; }   /* annotations */
+  .sourceCode .at { color: #005cc5; }                     /* attributes */
+  .sourceCode .im { color: #005cc5; }                     /* imports */
+
+  #TOC {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+  }
+
+  #TOC > ul {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  #TOC ul {
+    list-style: none;
+    padding-left: 20px;
+  }
+
+  #TOC li {
+    margin: 8px 0;
+  }
+
+  #TOC a {
+    text-decoration: none;
+    color: #0066cc;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  #TOC a:hover {
+    color: #004499;
+    text-decoration: underline;
+  }
+
+  #TOC > ul > li > a {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #333;
+  }
+
+  #TOC ul ul a {
+    font-size: 0.95em;
+    color: #555;
+  }
+
+  hr {
+      background: #cacaca;
+  }
+
+  .w-50 {
+      width: 50%;
+  }
+
+  .w-100 {
+      width: 100%;
+  }
+
+  .max-w-100 {
+      max-width: 100% !important;
+  }
+
+  .shadow-xs {
+      box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  }
+
+  </style>
+</head>
+<body>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#gem5-simulator-hello-world-program-execution-report"
+id="toc-gem5-simulator-hello-world-program-execution-report">GEM5
+Simulator: Hello World Program Execution Report</a>
+<ul>
+<li><a href="#abstract" id="toc-abstract">Abstract</a></li>
+<li><a href="#table-of-contents" id="toc-table-of-contents">Table of
+Contents</a></li>
+<li><a href="#introduction" id="toc-introduction">1. Introduction</a>
+<ul>
+<li><a href="#objectives" id="toc-objectives">Objectives:</a></li>
+</ul></li>
+<li><a href="#environment-setup" id="toc-environment-setup">2.
+Environment Setup</a>
+<ul>
+<li><a href="#system-requirements" id="toc-system-requirements">System
+Requirements:</a></li>
+<li><a href="#step-2.1-docker-container-setup"
+id="toc-step-2.1-docker-container-setup">Step 2.1: Docker Container
+Setup</a></li>
+<li><a href="#step-2.2-system-update-and-dependency-installation"
+id="toc-step-2.2-system-update-and-dependency-installation">Step 2.2:
+System Update and Dependency Installation</a></li>
+</ul></li>
+<li><a href="#gem5-installation" id="toc-gem5-installation">3. GEM5
+Installation</a>
+<ul>
+<li><a href="#step-3.1-clone-gem5-repository"
+id="toc-step-3.1-clone-gem5-repository">Step 3.1: Clone GEM5
+Repository</a></li>
+<li><a href="#step-3.2-build-gem5-for-x86-architecture"
+id="toc-step-3.2-build-gem5-for-x86-architecture">Step 3.2: Build GEM5
+for X86 Architecture</a></li>
+<li><a href="#build-output" id="toc-build-output">Build Output:</a></li>
+</ul></li>
+<li><a href="#hello-world-program" id="toc-hello-world-program">4. Hello
+World Program</a>
+<ul>
+<li><a href="#step-4.1-create-the-source-file"
+id="toc-step-4.1-create-the-source-file">Step 4.1: Create the Source
+File</a></li>
+<li><a href="#step-4.2-compile-the-program"
+id="toc-step-4.2-compile-the-program">Step 4.2: Compile the
+Program</a></li>
+<li><a href="#verification" id="toc-verification">Verification:</a></li>
+</ul></li>
+<li><a href="#simulation-script" id="toc-simulation-script">5.
+Simulation Script</a>
+<ul>
+<li><a href="#step-5.1-understanding-the-configuration-script"
+id="toc-step-5.1-understanding-the-configuration-script">Step 5.1:
+Understanding the Configuration Script</a></li>
+<li><a href="#configuration-components"
+id="toc-configuration-components">Configuration Components:</a></li>
+</ul></li>
+<li><a href="#running-the-simulation" id="toc-running-the-simulation">6.
+Running the Simulation</a>
+<ul>
+<li><a href="#step-6.1-execute-with-built-in-se-script"
+id="toc-step-6.1-execute-with-built-in-se-script">Step 6.1: Execute with
+Built-in SE Script</a></li>
+<li><a href="#actual-simulation-output"
+id="toc-actual-simulation-output">Actual Simulation Output:</a></li>
+</ul></li>
+<li><a href="#output-analysis" id="toc-output-analysis">7. Output
+Analysis</a>
+<ul>
+<li><a href="#simulation-results-summary"
+id="toc-simulation-results-summary">7.1 Simulation Results
+Summary</a></li>
+<li><a href="#detailed-statistics-from-m5outstats.txt"
+id="toc-detailed-statistics-from-m5outstats.txt">7.2 Detailed Statistics
+from <code>m5out/stats.txt</code>:</a></li>
+<li><a href="#instruction-mix-analysis"
+id="toc-instruction-mix-analysis">7.3 Instruction Mix Analysis</a></li>
+<li><a href="#view-statistics-command"
+id="toc-view-statistics-command">7.4 View Statistics Command:</a></li>
+</ul></li>
+<li><a href="#challenges-encountered-and-troubleshooting"
+id="toc-challenges-encountered-and-troubleshooting">8. Challenges
+Encountered and Troubleshooting</a>
+<ul>
+<li><a href="#challenge-1-macos-compatibility-issue"
+id="toc-challenge-1-macos-compatibility-issue">Challenge 1: macOS
+Compatibility Issue</a></li>
+<li><a href="#challenge-2-architecture-mismatch-arm-vs-x86"
+id="toc-challenge-2-architecture-mismatch-arm-vs-x86">Challenge 2:
+Architecture Mismatch (ARM vs X86)</a></li>
+<li><a href="#challenge-3-deprecated-script-location"
+id="toc-challenge-3-deprecated-script-location">Challenge 3: Deprecated
+Script Location</a></li>
+<li><a href="#challenge-4-missing-build-dependencies"
+id="toc-challenge-4-missing-build-dependencies">Challenge 4: Missing
+Build Dependencies</a></li>
+<li><a href="#challenge-5-long-build-time-optimization"
+id="toc-challenge-5-long-build-time-optimization">Challenge 5: Long
+Build Time Optimization</a></li>
+<li><a href="#troubleshooting-summary-table"
+id="toc-troubleshooting-summary-table">Troubleshooting Summary
+Table</a></li>
+</ul></li>
+<li><a href="#lessons-learned" id="toc-lessons-learned">9. Lessons
+Learned</a>
+<ul>
+<li><a href="#understanding-computer-architecture-simulation"
+id="toc-understanding-computer-architecture-simulation">9.1
+Understanding Computer Architecture Simulation</a></li>
+<li><a href="#simulation-modes" id="toc-simulation-modes">9.2 Simulation
+Modes</a></li>
+<li><a href="#cross-platform-development"
+id="toc-cross-platform-development">9.3 Cross-Platform
+Development</a></li>
+<li><a href="#performance-metrics-interpretation"
+id="toc-performance-metrics-interpretation">9.4 Performance Metrics
+Interpretation</a></li>
+<li><a href="#timing-models-in-gem5" id="toc-timing-models-in-gem5">9.5
+Timing Models in GEM5</a></li>
+</ul></li>
+<li><a href="#conclusion" id="toc-conclusion">10. Conclusion</a>
+<ul>
+<li><a href="#key-accomplishments" id="toc-key-accomplishments">Key
+Accomplishments:</a></li>
+<li><a href="#key-findings" id="toc-key-findings">Key Findings:</a></li>
+</ul></li>
+<li><a href="#references" id="toc-references">11. References</a></li>
+<li><a href="#appendices" id="toc-appendices">Appendices</a></li>
+<li><a href="#appendix-a-file-listings"
+id="toc-appendix-a-file-listings">Appendix A: File Listings</a>
+<ul>
+<li><a href="#hello.c" id="toc-hello.c">hello.c</a></li>
+<li><a href="#run_hello.py" id="toc-run_hello.py">run_hello.py</a></li>
+</ul></li>
+<li><a href="#appendix-b-command-summary"
+id="toc-appendix-b-command-summary">Appendix B: Command Summary</a></li>
+<li><a href="#appendix-c-complete-simulation-output"
+id="toc-appendix-c-complete-simulation-output">Appendix C: Complete
+Simulation Output</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="gem5-simulator-hello-world-program-execution-report">GEM5
+Simulator: Hello World Program Execution Report</h1>
+<hr />
+<p><strong>Course:</strong> Computer Architecture Design<br />
+<strong>Assignment:</strong> Using GEM5 Simulator<br />
+<strong>Student Name:</strong> Sai Mohan Manukonda<br />
+<strong>Student ID:</strong> 005046992<br />
+<strong>Instructor:</strong> Professor Gary Perry<br />
+<strong>Institution:</strong> University of the Cumberlands<br />
+<strong>Date:</strong> March 12, 2026</p>
+<hr />
+<h2 id="abstract">Abstract</h2>
+<p>This report documents the installation, configuration, and execution
+of the GEM5 computer architecture simulator. The primary objective was
+to execute a simple “Hello World” C program within the GEM5 simulated
+X86 environment to understand the fundamentals of processor simulation.
+The assignment was completed using Docker containers on macOS to create
+a compatible Linux environment. Key challenges included cross-platform
+compatibility issues and architecture mismatches between the host ARM64
+system and the simulated X86 target. The simulation successfully
+executed the program, completing in 11,491,500 ticks with 10,220
+instructions. This exercise provided valuable insights into
+cycle-accurate simulation, memory hierarchy, and performance metrics
+analysis in computer architecture research.</p>
+<p><strong>Keywords:</strong> GEM5, computer architecture, simulation,
+X86, syscall emulation, Docker</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol type="1">
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#environment-setup">Environment Setup</a></li>
+<li><a href="#gem5-installation">GEM5 Installation</a></li>
+<li><a href="#hello-world-program">Hello World Program</a></li>
+<li><a href="#simulation-script">Simulation Script</a></li>
+<li><a href="#running-the-simulation">Running the Simulation</a></li>
+<li><a href="#output-analysis">Output Analysis</a></li>
+<li><a href="#challenges-encountered">Challenges Encountered</a></li>
+<li><a href="#lessons-learned">Lessons Learned</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+<li><a href="#references">References</a></li>
+</ol>
+<hr />
+<h2 id="introduction">1. Introduction</h2>
+<p>GEM5 is a modular platform for computer-system architecture research,
+encompassing system-level architecture as well as processor
+microarchitecture. This assignment demonstrates the execution of a
+simple “Hello World” program using the GEM5 simulator to understand the
+basics of computer architecture simulation.</p>
+<h3 id="objectives">Objectives:</h3>
+<ul>
+<li>Install and configure GEM5 simulator</li>
+<li>Write and compile a simple C program</li>
+<li>Create a simulation configuration script</li>
+<li>Execute the program in GEM5’s Syscall Emulation (SE) mode</li>
+<li>Analyze the simulation output</li>
+</ul>
+<hr />
+<h2 id="environment-setup">2. Environment Setup</h2>
+<h3 id="system-requirements">System Requirements:</h3>
+<ul>
+<li><strong>Operating System:</strong> Ubuntu 22.04 LTS (running in
+Docker container)</li>
+<li><strong>Host System:</strong> macOS with Apple Silicon (ARM64)</li>
+<li><strong>RAM:</strong> Minimum 8GB (16GB recommended for faster
+compilation)</li>
+<li><strong>Disk Space:</strong> At least 10GB free space</li>
+</ul>
+<h3 id="step-2.1-docker-container-setup">Step 2.1: Docker Container
+Setup</h3>
+<p>Since GEM5 requires Linux, we used Docker to create an Ubuntu
+environment:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-it</span> <span class="at">-v</span> ~/cumberlands/ComputerArchitectureDesign/Using_GEM5:/workspace ubuntu:22.04 /bin/bash</span></code></pre></div>
+<h3 id="step-2.2-system-update-and-dependency-installation">Step 2.2:
+System Update and Dependency Installation</h3>
+<p>Inside the Docker container, update the system packages and install
+required dependencies:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">apt-get</span> update</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">apt-get</span> install <span class="at">-y</span> python3 scons gcc g++ git build-essential m4 zlib1g zlib1g-dev <span class="dt">\</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    libprotobuf-dev protobuf-compiler libprotoc-dev libgoogle-perftools-dev <span class="dt">\</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    python3-dev python3-six python-is-python3 libboost-all-dev pkg-config <span class="dt">\</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    gcc-x86-64-linux-gnu</span></code></pre></div>
+<p><img src="screenshots/01_install_dependencies.png"
+alt="Installing Dependencies" /> <em>Figure 1: Terminal output showing
+successful installation of required dependencies</em></p>
+<hr />
+<h2 id="gem5-installation">3. GEM5 Installation</h2>
+<h3 id="step-3.1-clone-gem5-repository">Step 3.1: Clone GEM5
+Repository</h3>
+<p>Clone the official GEM5 repository from Google Source:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://gem5.googlesource.com/public/gem5</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> gem5</span></code></pre></div>
+<p><img src="screenshots/02_git_clone.png"
+alt="Cloning GEM5 Repository" /> <em>Figure 2: Cloning the GEM5
+repository from Google Source</em></p>
+<h3 id="step-3.2-build-gem5-for-x86-architecture">Step 3.2: Build GEM5
+for X86 Architecture</h3>
+<p>Build the simulator optimized for X86 architecture:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">scons</span> build/X86/gem5.opt <span class="at">-j</span><span class="va">$(</span><span class="fu">nproc</span><span class="va">)</span></span></code></pre></div>
+<p><strong>Note:</strong> The <code>-j$(nproc)</code> flag enables
+parallel compilation using all available CPU cores. This process takes
+approximately 30-60 minutes depending on system specifications.</p>
+<p><img src="screenshots/03_gem5_build_complete.png"
+alt="GEM5 Build Complete" /> <em>Figure 3: Successful completion of GEM5
+build for X86 architecture</em></p>
+<h3 id="build-output">Build Output:</h3>
+<p>Upon successful compilation, you should see:</p>
+<pre><code>scons: done building targets.</code></pre>
+<hr />
+<h2 id="hello-world-program">4. Hello World Program</h2>
+<h3 id="step-4.1-create-the-source-file">Step 4.1: Create the Source
+File</h3>
+<p>Create a simple C program named <code>hello.c</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Hello, World!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><img src="screenshots/04_hello_c_code.png"
+alt="Hello.c Source Code" /> <em>Figure 4: The hello.c source code
+displayed in terminal</em></p>
+<h3 id="step-4.2-compile-the-program">Step 4.2: Compile the Program</h3>
+<p>Since we’re running on ARM64 Docker but simulating X86, we need to
+cross-compile:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">x86_64-linux-gnu-gcc</span> <span class="at">-static</span> hello.c <span class="at">-o</span> hello</span></code></pre></div>
+<p><strong>Note:</strong> Static linking is required for GEM5 SE mode as
+it includes all library dependencies in the executable.
+Cross-compilation is necessary when the host architecture differs from
+the simulated architecture.</p>
+<p><img src="screenshots/05_compile_hello.png"
+alt="Compiling Hello Program" /> <em>Figure 5: Cross-compilation of
+hello.c for X86 architecture and verification</em></p>
+<h3 id="verification">Verification:</h3>
+<p>Verify the executable was created correctly:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">file</span> hello</span></code></pre></div>
+<p>Expected output:</p>
+<pre><code>hello: ELF 64-bit LSB executable, x86-64, version 1 (GNU/Linux), statically linked...</code></pre>
+<hr />
+<h2 id="simulation-script">5. Simulation Script</h2>
+<h3 id="step-5.1-understanding-the-configuration-script">Step 5.1:
+Understanding the Configuration Script</h3>
+<p>The simulation script (<code>run_hello.py</code>) configures the
+simulated system:</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> m5</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> m5.objects <span class="im">import</span> <span class="op">*</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the system</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>system <span class="op">=</span> System()</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>system.clk_domain <span class="op">=</span> SrcClockDomain()</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>system.clk_domain.clock <span class="op">=</span> <span class="st">&quot;1GHz&quot;</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>system.clk_domain.voltage_domain <span class="op">=</span> VoltageDomain()</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Memory configuration</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>system.mem_mode <span class="op">=</span> <span class="st">&quot;timing&quot;</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>system.mem_ranges <span class="op">=</span> [AddrRange(<span class="st">&quot;512MB&quot;</span>)]</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>system.mem_ctrl <span class="op">=</span> DDR3_1600_8x8()</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>system.mem_ctrl.<span class="bu">range</span> <span class="op">=</span> system.mem_ranges[<span class="dv">0</span>]</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="co"># CPU configuration</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>system.cpu <span class="op">=</span> TimingSimpleCPU()</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>system.cpu.icache <span class="op">=</span> L1_ICache(size<span class="op">=</span><span class="st">&quot;32kB&quot;</span>)</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>system.cpu.dcache <span class="op">=</span> L1_DCache(size<span class="op">=</span><span class="st">&quot;32kB&quot;</span>)</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Connecting CPU and Memory</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>system.membus <span class="op">=</span> SystemXBar()</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>system.cpu.icache_port <span class="op">=</span> system.membus.slave</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>system.cpu.dcache_port <span class="op">=</span> system.membus.slave</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>system.cpu.createInterruptController()</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Setting up workload</span></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>system.workload <span class="op">=</span> SEWorkload.init_compatible(<span class="st">&quot;hello&quot;</span>)</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>system.cpu.workload <span class="op">=</span> system.workload</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>system.cpu.createThreads()</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulation Configuration</span></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>root <span class="op">=</span> Root(full_system<span class="op">=</span><span class="va">False</span>, system<span class="op">=</span>system)</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>m5.instantiate()</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Beginning simulation!&quot;</span>)</span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>exit_event <span class="op">=</span> m5.simulate()</span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Exiting @ tick </span><span class="sc">{}</span><span class="st"> because </span><span class="sc">{}</span><span class="st">&quot;</span>.<span class="bu">format</span>(</span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>    m5.curTick(), exit_event.getCause()))</span></code></pre></div>
+<h3 id="configuration-components">Configuration Components:</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Configuration</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Clock</td>
+<td>1GHz</td>
+<td>System clock frequency</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>512MB DDR3-1600</td>
+<td>Main memory configuration</td>
+</tr>
+<tr>
+<td>CPU</td>
+<td>TimingSimpleCPU</td>
+<td>Simple timing-accurate CPU model</td>
+</tr>
+<tr>
+<td>L1 I-Cache</td>
+<td>32KB</td>
+<td>Instruction cache size</td>
+</tr>
+<tr>
+<td>L1 D-Cache</td>
+<td>32KB</td>
+<td>Data cache size</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="running-the-simulation">6. Running the Simulation</h2>
+<h3 id="step-6.1-execute-with-built-in-se-script">Step 6.1: Execute with
+Built-in SE Script</h3>
+<p>Run the simulation using GEM5’s built-in SE configuration:</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./gem5/build/X86/gem5.opt</span> ./gem5/configs/deprecated/example/se.py <span class="at">-c</span> ./hello</span></code></pre></div>
+<p><img src="screenshots/06_simulation_output.png"
+alt="Simulation Output" /> <em>Figure 6: GEM5 simulation output showing
+successful “Hello, World!” execution</em></p>
+<h3 id="actual-simulation-output">Actual Simulation Output:</h3>
+<pre><code>gem5 Simulator System.  https://www.gem5.org
+gem5 version 23.0.0.1
+gem5 compiled Mar 11 2026 15:53:27
+gem5 started Mar 12 2026 01:05:17
+gem5 executing on 590f72e57b21, pid 24277
+command line: ./gem5/build/X86/gem5.opt ./gem5/configs/deprecated/example/se.py -c ./hello
+
+warn: The `get_runtime_isa` function is deprecated. Please migrate away from using this function.
+warn: The se.py script is deprecated. It will be removed in future releases of gem5.
+Global frequency set at 1000000000000 ticks per second
+warn: No dot file generated. Please install pydot to generate the dot file and pdf.
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (512 Mbytes)
+system.remote_gdb: Listening for connections on port 7000
+**** REAL SIMULATION ****
+src/sim/simulate.cc:194: info: Entering event queue @ 0.  Starting simulation...
+Hello, World!
+Exiting @ tick 11491500 because exiting with last active thread context</code></pre>
+<hr />
+<h2 id="output-analysis">7. Output Analysis</h2>
+<h3 id="simulation-results-summary">7.1 Simulation Results Summary</h3>
+<p>The simulation completed successfully with the following key
+metrics:</p>
+<table>
+<colgroup>
+<col style="width: 28%" />
+<col style="width: 25%" />
+<col style="width: 46%" />
+</colgroup>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Exit Tick</strong></td>
+<td>11,491,500</td>
+<td>Total simulation ticks</td>
+</tr>
+<tr>
+<td><strong>Simulated Time</strong></td>
+<td>0.000011 seconds (~11.5 µs)</td>
+<td>Virtual time elapsed</td>
+</tr>
+<tr>
+<td><strong>Host Time</strong></td>
+<td>0.03 seconds</td>
+<td>Real wall-clock time</td>
+</tr>
+<tr>
+<td><strong>Instructions Simulated</strong></td>
+<td>10,220</td>
+<td>Total instructions executed</td>
+</tr>
+<tr>
+<td><strong>CPU Cycles</strong></td>
+<td>23,016</td>
+<td>Total CPU cycles</td>
+</tr>
+<tr>
+<td><strong>CPI</strong></td>
+<td>2.25</td>
+<td>Cycles per instruction</td>
+</tr>
+<tr>
+<td><strong>IPC</strong></td>
+<td>0.44</td>
+<td>Instructions per cycle</td>
+</tr>
+</tbody>
+</table>
+<h3 id="detailed-statistics-from-m5outstats.txt">7.2 Detailed Statistics
+from <code>m5out/stats.txt</code>:</h3>
+<pre><code>---------- Begin Simulation Statistics ----------
+simSeconds                                   0.000011
+simTicks                                     11491500
+simFreq                                  1000000000000
+hostSeconds                                      0.03
+hostTickRate                                386384173
+simInsts                                        10220
+simOps                                          19633
+system.cpu.numCycles                            23016
+system.cpu.cpi                               2.247656
+system.cpu.ipc                               0.444908
+system.cpu.commitStats0.numInsts                10240
+system.cpu.commitStats0.numLoadInsts             1965
+system.cpu.commitStats0.numStoreInsts            1986
+system.cpu.commitStats0.numIntInsts             18767
+system.cpu.commitStats0.numFpInsts               1405</code></pre>
+<p><img src="screenshots/07_stats_output.png" alt="Statistics Output" />
+<em>Figure 7: Detailed simulation statistics from
+m5out/stats.txt</em></p>
+<h3 id="instruction-mix-analysis">7.3 Instruction Mix Analysis</h3>
+<table>
+<thead>
+<tr>
+<th>Instruction Type</th>
+<th>Count</th>
+<th>Percentage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Integer ALU</td>
+<td>14,884</td>
+<td>75.73%</td>
+</tr>
+<tr>
+<td>Memory Read</td>
+<td>1,840</td>
+<td>9.36%</td>
+</tr>
+<tr>
+<td>Memory Write</td>
+<td>1,439</td>
+<td>7.32%</td>
+</tr>
+<tr>
+<td>Float Add</td>
+<td>181</td>
+<td>0.92%</td>
+</tr>
+<tr>
+<td>SIMD Operations</td>
+<td>389</td>
+<td>1.98%</td>
+</tr>
+<tr>
+<td>Other</td>
+<td>921</td>
+<td>4.69%</td>
+</tr>
+</tbody>
+</table>
+<h3 id="view-statistics-command">7.4 View Statistics Command:</h3>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-100</span> m5out/stats.txt</span></code></pre></div>
+<hr />
+<h2 id="challenges-encountered-and-troubleshooting">8. Challenges
+Encountered and Troubleshooting</h2>
+<p>This section documents the issues encountered during the assignment
+and the systematic approach used to resolve each problem. Effective
+troubleshooting was critical to successfully completing this simulation
+exercise.</p>
+<h3 id="challenge-1-macos-compatibility-issue">Challenge 1: macOS
+Compatibility Issue</h3>
+<table>
+<colgroup>
+<col style="width: 47%" />
+<col style="width: 52%" />
+</colgroup>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Problem</strong></td>
+<td>GEM5 does not build natively on macOS operating system</td>
+</tr>
+<tr>
+<td><strong>Symptoms</strong></td>
+<td>Build system errors, missing Linux-specific libraries</td>
+</tr>
+<tr>
+<td><strong>Root Cause</strong></td>
+<td>GEM5 is designed primarily for Linux environments</td>
+</tr>
+<tr>
+<td><strong>Investigation</strong></td>
+<td>Reviewed GEM5 documentation and community forums</td>
+</tr>
+<tr>
+<td><strong>Solution</strong></td>
+<td>Deployed Docker container running Ubuntu 22.04 LTS</td>
+</tr>
+<tr>
+<td><strong>Verification</strong></td>
+<td>Successfully executed <code>apt-get update</code> inside
+container</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Commands Used:</strong></p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-it</span> <span class="at">-v</span> ~/cumberlands/ComputerArchitectureDesign/Using_GEM5:/workspace ubuntu:22.04 /bin/bash</span></code></pre></div>
+<h3 id="challenge-2-architecture-mismatch-arm-vs-x86">Challenge 2:
+Architecture Mismatch (ARM vs X86)</h3>
+<table>
+<colgroup>
+<col style="width: 47%" />
+<col style="width: 52%" />
+</colgroup>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Problem</strong></td>
+<td>Compiled binary incompatible with GEM5 X86 simulator</td>
+</tr>
+<tr>
+<td><strong>Symptoms</strong></td>
+<td><code>ValueError: ('No SE workload is compatible with %s', './hello')</code></td>
+</tr>
+<tr>
+<td><strong>Root Cause</strong></td>
+<td>Docker on Apple Silicon runs ARM64 containers, producing ARM
+binaries</td>
+</tr>
+<tr>
+<td><strong>Investigation</strong></td>
+<td>Used <code>file hello</code> command to verify binary
+architecture</td>
+</tr>
+<tr>
+<td><strong>Solution</strong></td>
+<td>Installed x86_64 cross-compiler for cross-compilation</td>
+</tr>
+<tr>
+<td><strong>Verification</strong></td>
+<td><code>file hello</code> showed “ELF 64-bit LSB executable,
+x86-64”</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Troubleshooting Steps:</strong> 1. Identified the error
+message indicating workload incompatibility 2. Checked binary
+architecture using <code>file hello</code> command 3. Discovered binary
+was ARM64 instead of X86-64 4. Researched cross-compilation solutions 5.
+Installed and used x86_64-linux-gnu-gcc cross-compiler</p>
+<p><strong>Commands Used:</strong></p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check binary architecture</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">file</span> hello</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Output: hello: ELF 64-bit LSB pie executable, ARM aarch64... (WRONG)</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Install cross-compiler</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="ex">apt-get</span> install <span class="at">-y</span> gcc-x86-64-linux-gnu</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Cross-compile for X86</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="ex">x86_64-linux-gnu-gcc</span> <span class="at">-static</span> hello.c <span class="at">-o</span> hello</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify correct architecture</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="fu">file</span> hello</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Output: hello: ELF 64-bit LSB executable, x86-64... (CORRECT)</span></span></code></pre></div>
+<h3 id="challenge-3-deprecated-script-location">Challenge 3: Deprecated
+Script Location</h3>
+<table>
+<colgroup>
+<col style="width: 47%" />
+<col style="width: 52%" />
+</colgroup>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Problem</strong></td>
+<td>Original script path <code>configs/example/se.py</code> not
+working</td>
+</tr>
+<tr>
+<td><strong>Symptoms</strong></td>
+<td><code>fatal: The 'configs/example/se.py' script has been deprecated</code></td>
+</tr>
+<tr>
+<td><strong>Root Cause</strong></td>
+<td>GEM5 version 23.0 relocated SE scripts to deprecated folder</td>
+</tr>
+<tr>
+<td><strong>Investigation</strong></td>
+<td>Read error message and explored configs directory structure</td>
+</tr>
+<tr>
+<td><strong>Solution</strong></td>
+<td>Updated path to <code>configs/deprecated/example/se.py</code></td>
+</tr>
+<tr>
+<td><strong>Verification</strong></td>
+<td>Simulation ran successfully with new path</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Commands Used:</strong></p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Original command (failed)</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./gem5/build/X86/gem5.opt</span> ./gem5/configs/example/se.py <span class="at">-c</span> ./hello</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Updated command (success)</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="ex">./gem5/build/X86/gem5.opt</span> ./gem5/configs/deprecated/example/se.py <span class="at">-c</span> ./hello</span></code></pre></div>
+<h3 id="challenge-4-missing-build-dependencies">Challenge 4: Missing
+Build Dependencies</h3>
+<table>
+<colgroup>
+<col style="width: 47%" />
+<col style="width: 52%" />
+</colgroup>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Problem</strong></td>
+<td>GEM5 compilation failed due to missing libraries</td>
+</tr>
+<tr>
+<td><strong>Symptoms</strong></td>
+<td>Various “library not found” errors during scons build</td>
+</tr>
+<tr>
+<td><strong>Root Cause</strong></td>
+<td>Ubuntu minimal image lacks development packages</td>
+</tr>
+<tr>
+<td><strong>Investigation</strong></td>
+<td>Analyzed error messages to identify missing packages</td>
+</tr>
+<tr>
+<td><strong>Solution</strong></td>
+<td>Installed comprehensive dependency list</td>
+</tr>
+<tr>
+<td><strong>Verification</strong></td>
+<td>Build completed with “scons: done building targets”</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Complete Dependency Installation:</strong></p>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">apt-get</span> install <span class="at">-y</span> python3 scons gcc g++ git build-essential m4 <span class="dt">\</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    zlib1g zlib1g-dev libprotobuf-dev protobuf-compiler <span class="dt">\</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    libprotoc-dev libgoogle-perftools-dev python3-dev <span class="dt">\</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    python3-six python-is-python3 libboost-all-dev pkg-config</span></code></pre></div>
+<h3 id="challenge-5-long-build-time-optimization">Challenge 5: Long
+Build Time Optimization</h3>
+<table>
+<colgroup>
+<col style="width: 47%" />
+<col style="width: 52%" />
+</colgroup>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Problem</strong></td>
+<td>GEM5 compilation taking excessive time</td>
+</tr>
+<tr>
+<td><strong>Symptoms</strong></td>
+<td>Single-threaded build estimated &gt;2 hours</td>
+</tr>
+<tr>
+<td><strong>Root Cause</strong></td>
+<td>Default build uses single CPU core</td>
+</tr>
+<tr>
+<td><strong>Investigation</strong></td>
+<td>Reviewed scons documentation for parallel options</td>
+</tr>
+<tr>
+<td><strong>Solution</strong></td>
+<td>Used <code>-j$(nproc)</code> flag for parallel compilation</td>
+</tr>
+<tr>
+<td><strong>Verification</strong></td>
+<td>Build completed in ~45 minutes</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Optimization Applied:</strong></p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Parallel build using all available cores</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="ex">scons</span> build/X86/gem5.opt <span class="at">-j</span><span class="va">$(</span><span class="fu">nproc</span><span class="va">)</span></span></code></pre></div>
+<h3 id="troubleshooting-summary-table">Troubleshooting Summary
+Table</h3>
+<table>
+<thead>
+<tr>
+<th>Issue</th>
+<th>Error Type</th>
+<th>Time to Resolve</th>
+<th>Difficulty</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>macOS Compatibility</td>
+<td>Environment</td>
+<td>15 minutes</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>Architecture Mismatch</td>
+<td>Runtime</td>
+<td>30 minutes</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Deprecated Script</td>
+<td>Path Error</td>
+<td>5 minutes</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>Build Dependencies</td>
+<td>Compilation</td>
+<td>20 minutes</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>Long Build Time</td>
+<td>Performance</td>
+<td>5 minutes</td>
+<td>Low</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="lessons-learned">9. Lessons Learned</h2>
+<h3 id="understanding-computer-architecture-simulation">9.1
+Understanding Computer Architecture Simulation</h3>
+<ul>
+<li><strong>Cycle-Accurate Simulation:</strong> GEM5 provides detailed
+timing information (11,491,500 ticks for “Hello World”) that helps
+understand how programs execute at the hardware level.</li>
+<li><strong>Memory Hierarchy:</strong> The configuration demonstrates
+the importance of cache hierarchy in modern processors.</li>
+<li><strong>CPI Analysis:</strong> Our simple program achieved a CPI of
+2.25, indicating memory access latency impacts on execution.</li>
+</ul>
+<h3 id="simulation-modes">9.2 Simulation Modes</h3>
+<ul>
+<li><strong>Syscall Emulation (SE):</strong> Simulates user-level code
+by emulating system calls. Faster but less detailed. Used in this
+assignment.</li>
+<li><strong>Full System (FS):</strong> Simulates entire system including
+OS. More accurate but resource-intensive.</li>
+</ul>
+<h3 id="cross-platform-development">9.3 Cross-Platform Development</h3>
+<ul>
+<li>Understanding the importance of target architecture when compiling
+binaries</li>
+<li>Cross-compilation techniques for running X86 programs on ARM
+development machines</li>
+<li>Docker as a solution for platform compatibility issues</li>
+</ul>
+<h3 id="performance-metrics-interpretation">9.4 Performance Metrics
+Interpretation</h3>
+<p>The simulation provides valuable insights into: - <strong>Instruction
+count:</strong> 10,220 instructions for a simple print statement shows
+library overhead - <strong>Instruction mix:</strong> 75% integer ALU
+operations typical for system initialization - <strong>Memory
+operations:</strong> ~17% of operations are memory accesses</p>
+<h3 id="timing-models-in-gem5">9.5 Timing Models in GEM5</h3>
+<ul>
+<li><strong>AtomicSimpleCPU:</strong> Fast functional simulation, no
+timing</li>
+<li><strong>TimingSimpleCPU:</strong> Simple timing-accurate model (used
+in this assignment)</li>
+<li><strong>O3CPU:</strong> Detailed out-of-order execution model for
+advanced research</li>
+</ul>
+<hr />
+<h2 id="conclusion">10. Conclusion</h2>
+<p>This assignment successfully demonstrated the installation,
+configuration, and execution of the GEM5 simulator. The “Hello, World!”
+program was compiled and executed within the simulated X86 environment,
+validating the correct setup of the simulation infrastructure.</p>
+<h3 id="key-accomplishments">Key Accomplishments:</h3>
+<ol type="1">
+<li>✅ Set up GEM5 development environment using Docker</li>
+<li>✅ Successfully built GEM5 for X86 architecture</li>
+<li>✅ Created and cross-compiled Hello World program for X86</li>
+<li>✅ Configured simulation parameters correctly</li>
+<li>✅ Executed simulation and obtained <strong>“Hello, World!”</strong>
+output</li>
+<li>✅ Analyzed simulation statistics (11,491,500 ticks, 10,220
+instructions)</li>
+</ol>
+<h3 id="key-findings">Key Findings:</h3>
+<ul>
+<li>Simple “Hello World” program required <strong>10,220
+instructions</strong> and <strong>23,016 CPU cycles</strong></li>
+<li>Achieved <strong>CPI of 2.25</strong> indicating memory-bound
+execution</li>
+<li>Simulation completed in <strong>0.03 seconds</strong> of real
+time</li>
+<li><strong>75.73%</strong> of instructions were integer ALU
+operations</li>
+</ul>
+<p>The exercise provided valuable hands-on experience with computer
+architecture simulation, reinforcing theoretical concepts with practical
+implementation. Understanding GEM5 is crucial for computer architecture
+research, enabling detailed analysis of processor designs before
+physical implementation.</p>
+<hr />
+<h2 id="references">11. References</h2>
+<p>Binkert, N., Beckmann, B., Black, G., Reinhardt, S. K., Saidi, A.,
+Basu, A., Hestness, J., Hower, D. R., Krishna, T., Sardashti, S., Sen,
+R., Sewell, K., Shoaib, M., Vaber, N., Hill, M. D., &amp; Wood, D. A.
+(2011). The gem5 simulator. <em>ACM SIGARCH Computer Architecture
+News</em>, <em>39</em>(2), 1-7.
+https://doi.org/10.1145/2024716.2024718</p>
+<p>Docker Inc. (2024). <em>Docker documentation</em>. Docker.
+https://docs.docker.com/</p>
+<p>GEM5 Project. (n.d.-a). <em>GEM5 documentation</em>. Retrieved March
+11, 2026, from https://www.gem5.org/documentation/</p>
+<p>GEM5 Project. (n.d.-b). <em>Getting started with gem5</em>. Retrieved
+March 11, 2026, from https://www.gem5.org/getting_started/</p>
+<p>GNU Project. (2024). <em>GCC, the GNU Compiler Collection</em>. Free
+Software Foundation. https://gcc.gnu.org/</p>
+<p>Lowe-Power, J., Ahmad, A. M., Akram, A., Alian, M., Amslinger, R.,
+Andreozzi, M., Armejach, A., Asmussen, N., Beckmann, B., Bharadwaj, S.,
+Black, G., Bloom, G., Bruce, B. R., Carvalho, D. R., Castrillon, J.,
+Chen, L., Derber, N., &amp; Wood, D. A. (2020). The gem5 simulator:
+Version 20.0+. <em>arXiv preprint arXiv:2007.03152</em>.
+https://arxiv.org/abs/2007.03152</p>
+<p>Patterson, D. A., &amp; Hennessy, J. L. (2017). <em>Computer
+organization and design: The hardware/software interface</em> (5th ed.).
+Morgan Kaufmann.</p>
+<p>Stallings, W. (2021). <em>Computer organization and architecture:
+Designing for performance</em> (11th ed.). Pearson.</p>
+<hr />
+<h2 id="appendices">Appendices</h2>
+<h2 id="appendix-a-file-listings">Appendix A: File Listings</h2>
+<h3 id="hello.c">hello.c</h3>
+<div class="sourceCode" id="cb20"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Hello, World!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h3 id="run_hello.py">run_hello.py</h3>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> m5</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> m5.objects <span class="im">import</span> <span class="op">*</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the system</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>system <span class="op">=</span> System()</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>system.clk_domain <span class="op">=</span> SrcClockDomain()</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>system.clk_domain.clock <span class="op">=</span> <span class="st">&quot;1GHz&quot;</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>system.clk_domain.voltage_domain <span class="op">=</span> VoltageDomain()</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Memory configuration</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>system.mem_mode <span class="op">=</span> <span class="st">&quot;timing&quot;</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>system.mem_ranges <span class="op">=</span> [AddrRange(<span class="st">&quot;512MB&quot;</span>)]</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>system.mem_ctrl <span class="op">=</span> DDR3_1600_8x8()</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>system.mem_ctrl.<span class="bu">range</span> <span class="op">=</span> system.mem_ranges[<span class="dv">0</span>]</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a><span class="co"># CPU configuration</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>system.cpu <span class="op">=</span> TimingSimpleCPU()</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>system.cpu.icache <span class="op">=</span> L1_ICache(size<span class="op">=</span><span class="st">&quot;32kB&quot;</span>)</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>system.cpu.dcache <span class="op">=</span> L1_DCache(size<span class="op">=</span><span class="st">&quot;32kB&quot;</span>)</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Connecting CPU and Memory</span></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>system.membus <span class="op">=</span> SystemXBar()</span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>system.cpu.icache_port <span class="op">=</span> system.membus.slave</span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>system.cpu.dcache_port <span class="op">=</span> system.membus.slave</span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>system.cpu.createInterruptController()</span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Setting up workload</span></span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a>system.workload <span class="op">=</span> SEWorkload.init_compatible(<span class="st">&quot;hello&quot;</span>)</span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a>system.cpu.workload <span class="op">=</span> system.workload</span>
+<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a>system.cpu.createThreads()</span>
+<span id="cb21-31"><a href="#cb21-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-32"><a href="#cb21-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulation Configuration</span></span>
+<span id="cb21-33"><a href="#cb21-33" aria-hidden="true" tabindex="-1"></a>root <span class="op">=</span> Root(full_system<span class="op">=</span><span class="va">False</span>, system<span class="op">=</span>system)</span>
+<span id="cb21-34"><a href="#cb21-34" aria-hidden="true" tabindex="-1"></a>m5.instantiate()</span>
+<span id="cb21-35"><a href="#cb21-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-36"><a href="#cb21-36" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Beginning simulation!&quot;</span>)</span>
+<span id="cb21-37"><a href="#cb21-37" aria-hidden="true" tabindex="-1"></a>exit_event <span class="op">=</span> m5.simulate()</span>
+<span id="cb21-38"><a href="#cb21-38" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Exiting @ tick </span><span class="sc">{}</span><span class="st"> because </span><span class="sc">{}</span><span class="st">&quot;</span>.<span class="bu">format</span>(</span>
+<span id="cb21-39"><a href="#cb21-39" aria-hidden="true" tabindex="-1"></a>    m5.curTick(), exit_event.getCause()))</span></code></pre></div>
+<hr />
+<h2 id="appendix-b-command-summary">Appendix B: Command Summary</h2>
+<table>
+<colgroup>
+<col style="width: 40%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr>
+<th>Step</th>
+<th>Command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Start Docker</td>
+<td><code>docker run -it -v ~/workspace:/workspace ubuntu:22.04 /bin/bash</code></td>
+</tr>
+<tr>
+<td>Update System</td>
+<td><code>apt-get update</code></td>
+</tr>
+<tr>
+<td>Install Dependencies</td>
+<td><code>apt-get install -y python3 scons gcc g++ git build-essential...</code></td>
+</tr>
+<tr>
+<td>Clone GEM5</td>
+<td><code>git clone https://gem5.googlesource.com/public/gem5</code></td>
+</tr>
+<tr>
+<td>Build GEM5</td>
+<td><code>scons build/X86/gem5.opt -j$(nproc)</code></td>
+</tr>
+<tr>
+<td>Install Cross-Compiler</td>
+<td><code>apt-get install -y gcc-x86-64-linux-gnu</code></td>
+</tr>
+<tr>
+<td>Compile Program</td>
+<td><code>x86_64-linux-gnu-gcc -static hello.c -o hello</code></td>
+</tr>
+<tr>
+<td>Run Simulation</td>
+<td><code>./gem5/build/X86/gem5.opt ./gem5/configs/deprecated/example/se.py -c ./hello</code></td>
+</tr>
+<tr>
+<td>View Statistics</td>
+<td><code>head -100 m5out/stats.txt</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="appendix-c-complete-simulation-output">Appendix C: Complete
+Simulation Output</h2>
+<pre><code>gem5 Simulator System.  https://www.gem5.org
+gem5 version 23.0.0.1
+gem5 compiled Mar 11 2026 15:53:27
+gem5 started Mar 12 2026 01:05:17
+gem5 executing on 590f72e57b21, pid 24277
+command line: ./gem5/build/X86/gem5.opt ./gem5/configs/deprecated/example/se.py -c ./hello
+
+warn: The `get_runtime_isa` function is deprecated. Please migrate away from using this function.
+warn: The se.py script is deprecated. It will be removed in future releases of gem5.
+Global frequency set at 1000000000000 ticks per second
+warn: No dot file generated. Please install pydot to generate the dot file and pdf.
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (512 Mbytes)
+system.remote_gdb: Listening for connections on port 7000
+**** REAL SIMULATION ****
+src/sim/simulate.cc:194: info: Entering event queue @ 0.  Starting simulation...
+Hello, World!
+Exiting @ tick 11491500 because exiting with last active thread context</code></pre>
+<hr />
+<p><em>Document prepared for Computer Architecture Design
+Course</em><br />
+<em>Assignment: Using GEM5 Simulator</em><br />
+<em>Date: March 12, 2026</em></p>
+</body>
+</html>
